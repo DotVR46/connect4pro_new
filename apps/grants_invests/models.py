@@ -8,7 +8,7 @@ TYPE = (("grant", "Грант"), ("invest", "Инвестиция"))
 class GrantInvest(models.Model):
     title = models.CharField(max_length=500, verbose_name="Название")
     description = models.TextField(verbose_name="Описание")
-    location = models.CharField(max_length=200, default="online", blank=True)
+    location = models.CharField(max_length=200, verbose_name="Место проведения", default="online", blank=True)
     type = models.CharField(
         max_length=20, verbose_name="Тип записи", choices=TYPE, default="grant"
     )

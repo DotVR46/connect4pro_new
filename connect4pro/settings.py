@@ -16,7 +16,6 @@ from dotenv import load_dotenv
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.1/howto/deployment/checklist/
 load_dotenv(os.path.join(BASE_DIR, ".env"))
@@ -24,16 +23,13 @@ load_dotenv(os.path.join(BASE_DIR, ".env"))
 SECRET_KEY = os.environ.get("SECRET")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get("DEBUG")
 
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
 INSTALLED_APPS = [
-    "apps.grants_invests.apps.GrantsInvestsConfig",
-    "apps.posts.apps.PostsConfig",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -44,6 +40,10 @@ INSTALLED_APPS = [
     "drf_yasg",
     "django_filters",
     "corsheaders",
+    "social_django",
+    "apps.grants_invests.apps.GrantsInvestsConfig",
+    "apps.posts.apps.PostsConfig",
+    "apps.users.apps.UsersConfig",
 ]
 
 MIDDLEWARE = [
@@ -56,12 +56,19 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 ]
 
+AUTHENTICATION_BACKENDS = (
+    "social_core.backends.open_id.OpenIdAuth",
+    "social_core.backends.google.GoogleOAuth2",
+    "social_core.backends.google.GoogleOAuth",
+    "social_core.backends.twitter.TwitterOAuth",
+    "django.contrib.auth.backends.ModelBackend",
+)
 ROOT_URLCONF = "connect4pro.urls"
 
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [os.path.join(BASE_DIR, "templates")],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -69,13 +76,14 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "social_django.context_processors.backends",
+                "social_django.context_processors.login_redirect",
             ],
         },
     },
 ]
 
 WSGI_APPLICATION = "connect4pro.wsgi.application"
-
 
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
@@ -90,7 +98,6 @@ DATABASES = {
         "PORT": os.environ.get("DB_PORT"),
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
@@ -110,7 +117,6 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
 
@@ -121,7 +127,6 @@ TIME_ZONE = "Asia/Bishkek"
 USE_I18N = True
 
 USE_TZ = False
-
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
@@ -137,3 +142,9 @@ CORS_ALLOWED_ORIGINS = ["http://localhost:3000"]
 
 CORS_EXPOSE_HEADERS = ["Content-Type", "X-CSRFToken"]
 CORS_ALLOW_CREDENTIALS = True
+
+SOCIAL_AUTH_JSONFIELD_ENABLED = True
+SOCIAL_AUTH_URL_NAMESPACE = "social"
+
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = os.environ.get("SOCIAL_AUTH_GOOGLE_OAUTH2_KEY")
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = os.environ.get("SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET")

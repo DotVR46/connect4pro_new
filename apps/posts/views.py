@@ -9,7 +9,7 @@ class PostListView(generics.ListAPIView):
     serializer_class = PostSerializer
     queryset = Post.objects.all()
     filter_backends = (filters.DjangoFilterBackend,)
-    filterset_fields = ("post_type",)
+    filter_fields = ["post_type"]
 
 
 class PostDetailView(generics.RetrieveAPIView):

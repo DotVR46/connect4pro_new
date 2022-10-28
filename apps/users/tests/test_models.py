@@ -14,6 +14,10 @@ class ProfileModelTestCase(TestCase):
     def test_one_to_one(self):
         self.assertEqual(self.user, self.profile.user)
 
-    def test_str(self):
+    def test_dunder_str(self):
         string = f"{self.user.email} - {self.profile.profile_type} - Премиум: {self.profile.premium}"
         self.assertEqual(string, self.profile.__str__())
+
+    def test_instance(self):
+        self.assertTrue(isinstance(self.profile, Profile))
+        self.assertTrue(isinstance(self.profile.user, User))

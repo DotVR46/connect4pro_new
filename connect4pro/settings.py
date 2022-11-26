@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     "apps.grants_invests.apps.GrantsInvestsConfig",
     "apps.posts.apps.PostsConfig",
     "apps.users.apps.UsersConfig",
+    "apps.adverts.apps.AdvertsConfig",
 ]
 
 MIDDLEWARE = [

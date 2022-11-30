@@ -6,7 +6,7 @@ PROFILE_TYPE = (("business", "Бизнес"), ("provider", "Провайдер")
 
 class Profile(models.Model):
     user = models.OneToOneField(
-        User, verbose_name="Пользователь", on_delete=models.CASCADE, related_name="user_profile"
+        User, primary_key=True, verbose_name="Пользователь", on_delete=models.CASCADE, related_name="user_profile"
     )
     avatar = models.ImageField(
         default="default.jpg", upload_to="profile_images/", verbose_name="Аватар"

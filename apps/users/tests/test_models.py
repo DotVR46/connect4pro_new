@@ -9,15 +9,14 @@ class ProfileModelTestCase(TestCase):
         self.user = User.objects.create_user(
             "user", email="test@test.com", password="123456"
         )
-        self.profile = Profile.objects.create(user=self.user)
 
     def test_one_to_one(self):
-        self.assertEqual(self.user, self.profile.user)
+        self.assertEqual(self.user, self.user.user_profile.user)
 
     def test_dunder_str(self):
-        string = f"{self.user.email} - {self.profile.profile_type} - Премиум: {self.profile.premium}"
-        self.assertEqual(string, self.profile.__str__())
+        string = f"{self.user.email} - {self.user.user_profile.profile_type} - Премиум: {self.user.user_profile.premium}"
+        self.assertEqual(string, self.user.user_profile.__str__())
 
     def test_instance(self):
-        self.assertTrue(isinstance(self.profile, Profile))
-        self.assertTrue(isinstance(self.profile.user, User))
+        self.assertTrue(isinstance(self.user.user_profile, Profile))
+        self.assertTrue(isinstance(self.user.user_profile.user, User))

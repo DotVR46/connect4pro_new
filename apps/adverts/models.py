@@ -7,7 +7,7 @@ CURRENCY = (("usd", "US Dollar"), ("kgs", "KG Сом"))
 
 class Advert(models.Model):
     user = models.ForeignKey(
-        User, on_delete=models.CASCADE, verbose_name="Пользователь"
+        User, on_delete=models.CASCADE, verbose_name="Пользователь", related_name="author"
     )
     title = models.CharField(max_length=300, verbose_name="Заголовок")
     content = models.TextField(verbose_name="Содержание")

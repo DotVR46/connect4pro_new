@@ -1,3 +1,8 @@
 from django.contrib import admin
 
-# Register your models here.
+from apps.adverts.models import Advert
+
+
+@admin.register(Advert)
+class AdvertAdmin(admin.ModelAdmin):
+    list_display = ("user", "title", "price", "currency", "created")

@@ -16,3 +16,12 @@ class AdvertUpdateView(generics.UpdateAPIView):
     queryset = Advert.objects.all()
     permission_classes = (IsAuthenticated, IsOwnerOrReadOnly)
     lookup_field = "id"
+
+
+class AdvertCreateView(generics.CreateAPIView):
+    serializer_class = AdvertSerializer
+    queryset = Advert.objects.all()
+    permission_classes = (IsAuthenticated,)
+
+    def perform_create(self, serializer):
+        serializer.save(user=self.request.user)

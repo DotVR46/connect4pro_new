@@ -25,3 +25,10 @@ class AdvertCreateView(generics.CreateAPIView):
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
+
+
+class AdvertRetrieveView(generics.RetrieveAPIView):
+    serializer_class = AdvertSerializer
+    queryset = Advert.objects.all()
+    permission_classes = (IsAuthenticated,)
+    lookup_field = "id"

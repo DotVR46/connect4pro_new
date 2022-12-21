@@ -20,7 +20,23 @@ class AdvertApiTestCase(TestCase):
     def test_get_list(self):
         url = reverse("advert-list")
         response = self.client.get(url)
-        serializer_data = AdvertSerializer([self.advert_1, self.advert_2], many=True).data
+        serializer_data = AdvertSerializer(
+            [self.advert_1, self.advert_2], many=True
+        ).data
 
         self.assertEqual(serializer_data, response.data)
         self.assertEqual(status.HTTP_200_OK, response.status_code)
+
+    def def_get_detail(self):
+        url = reverse("advert-get", kwargs={"id": 1})
+        response = self.client.get(url)
+        serializer_data = AdvertSerializer(self.advert_1).data
+
+        self.assertEqual(serializer_data, response.data)
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+
+    def test_update(self):
+        pass
+
+    def test_create(self):
+        pass

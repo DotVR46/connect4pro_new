@@ -1,7 +1,10 @@
+from datetime import datetime
+
 from django.contrib.auth.models import User
 from django.test import TestCase
 from django.urls import reverse
 from rest_framework import status
+from rest_framework.exceptions import ErrorDetail
 
 from apps.adverts.models import Advert
 from apps.adverts.serializers import AdvertSerializer
@@ -35,8 +38,43 @@ class AdvertApiTestCase(TestCase):
         self.assertEqual(serializer_data, response.data)
         self.assertEqual(status.HTTP_200_OK, response.status_code)
 
-    def test_update(self):
-        pass
+    def test_update_authenticated(self):
+        self.client.force_login(self.user)
+        url = reverse("advert-update", kwargs={"id": self.advert_1.id})
+        response = self.client.put(
+            url,
+            {"user": self.user.id, "title": "updated", "content": "updated"},
+            content_type="application/json",
+        )
+        self.advert_1.created = datetime.now()
+        expected_data = {
+            "user": self.user.id,
+            "user_email": "",
+            "title": "updated",
+            "content": "updated",
+            "created": datetime.now().isoformat(),
+            "price": 0,
+            "currency": "usd",
+        }
 
-    def test_create(self):
-        pass
+        self.assertEqual(status.HTTP_200_OK, response.status_code)
+        self.assertEqual(response.data, expected_data)
+
+    def test_update_not_authenticated(self):
+        url = reverse("advert-update", kwargs={"id": self.advert_1.id})
+        response = self.client.put(
+            url,
+            {"title": "updated", "content": "updated"},
+            content_type="application/json",
+        )
+        expected_data = {
+            "detail": ErrorDetail(
+                string="Учетные данные не были предоставлены.", code="not_authenticated"
+            )
+        }
+
+        self.assertEqual(status.HTTP_403_FORBIDDEN, response.status_code)
+        self.assertEqual(response.data, expected_data)
+
+    # def test_create(self):
+    #     pass

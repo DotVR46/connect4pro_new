@@ -46,17 +46,19 @@ class AdvertApiTestCase(TestCase):
             {"user": self.user.id, "title": "updated", "content": "updated"},
             content_type="application/json",
         )
-        self.advert_1.created = datetime.now()
+        date = datetime.now()
+        self.advert_1.created = date
+        self.advert_1.save()
         expected_data = {
             "user": self.user.id,
             "user_email": "",
             "title": "updated",
             "content": "updated",
-            "created": datetime.now().isoformat(),
+            "created": date.isoformat(),
             "price": 0,
             "currency": "usd",
         }
-
+        
         self.assertEqual(status.HTTP_200_OK, response.status_code)
         self.assertEqual(response.data, expected_data)
 

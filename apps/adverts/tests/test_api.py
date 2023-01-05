@@ -58,7 +58,7 @@ class AdvertApiTestCase(TestCase):
             "price": 0,
             "currency": "usd",
         }
-        
+
         self.assertEqual(status.HTTP_200_OK, response.status_code)
         self.assertEqual(response.data, expected_data)
 

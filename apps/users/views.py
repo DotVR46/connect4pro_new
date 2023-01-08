@@ -21,5 +21,18 @@ class UserListView(generics.ListAPIView):
     filter_backends = (filters.DjangoFilterBackend,)
 
 
+class UserDetailView(generics.RetrieveAPIView):
+    serializer_class = UserSerializer
+    queryset = User.objects.all().prefetch_related(
+        Prefetch(
+            "user_profile",
+            queryset=Profile.objects.all()
+            .select_related("user")
+            .only("avatar", "profile_type", "premium"),
+        )
+    )
+    lookup_field = "id"
+
+
 def auth(request):
     return render(request, "oauth.html")
